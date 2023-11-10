@@ -19,16 +19,22 @@ accounts:
       name: "手机型号，默认 Xiaomi 22011211C"
       model: "手机型号，默认 22011211C"
       version: "手机安卓版本，默认 13"
-      channel: "渠道，默认为 miyousheluodi"
-    uid: "用户 id"
+      channel: "渠道，默认 miyousheluodi"
+    uid: "米游社 uid"
     gtoken: "game token"
     ctoken: "cookie token"
-    mid: "米哈游 id"
+    mid: "米哈游 uid"
     stoken: "stoken v2"
 
 cron:
   spec: "签到奖励执行时间，默认 0 0 8 * * * 即每天 08:00:00"
   startup: "是否启动时执行一次，默认 false"
+
+# 打码平台配置，游戏福利签到可能需要打码，可选
+dm:
+    retry: "在打码失败后尝试次数，默认 1"
+rrocr:
+    key: ""
 ```
 
 ## Usage
@@ -40,6 +46,7 @@ Usage:
 
 Available Commands:
   account     Manage accounts
+  config      Manage config
   cron        Run as cron job
   notify      Manage notify
   sign        Run sign task
@@ -70,11 +77,18 @@ miyoushe-task account login <account phone>
 miyoushe-task sign bbs <account phone>
 ```
 
-### Luna `福利签到`
+### SignLuna `福利签到`
 
 ```shell
 # manual sign luna for input account phone
 miyoushe-task sign luna <account phone>
+```
+
+### Config
+
+```shell
+# write config to file
+miyoushe-task config save
 ```
 
 ### Notify
@@ -112,6 +126,7 @@ services:
       app.log.file.level: "debug"
       app.log.file.filename: "/miyoushe/app.log"
       app.cron.spec: "0 40 8 * * *"
+      app.rrocr.key: "foo"
 ```
 
 ## Thanks
