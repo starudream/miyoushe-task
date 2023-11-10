@@ -20,8 +20,9 @@ const (
 	AddrTakumi = "https://api-takumi.mihoyo.com"
 	AddrHK4E   = "https://hk4e-sdk.mihoyo.com"
 
-	UserAgent = "Mozilla/5.0 (Linux; Android 13; 22011211C Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/104.0.5112.97 Mobile Safari/537.36 miHoYoBBS/2.62.2"
-	Referer   = "https://app.mihoyo.com"
+	UserAgent  = "Mozilla/5.0 (Linux; Android 13; 22011211C Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/104.0.5112.97 Mobile Safari/537.36 miHoYoBBS/2.62.2"
+	Referer    = "https://app.mihoyo.com"
+	RefererAct = "https://act.mihoyo.com"
 
 	AppVersion = "2.62.2"
 	// AppSaltK2 https://blog.starudream.cn/2023/11/09/miyoushe-salt-2.62.2/
@@ -98,6 +99,11 @@ func IsRetCode(err error, rc int) bool {
 	return false
 }
 
+type Validate struct {
+	Challenge string `json:"challenge"`
+	Validate  string `json:"validate"`
+}
+
 func R(vs ...any) *resty.Request {
 	r := resty.R().
 		SetHeader("Accept-Encoding", "gzip").
@@ -110,6 +116,12 @@ func R(vs ...any) *resty.Request {
 		switch v := vs[i].(type) {
 		case config.Device:
 			r.SetHeaders(v.Headers())
+		case *Validate:
+			if v == nil {
+				continue
+			}
+			r.SetHeader("x-rpc-challenge", v.Challenge)
+			r.SetHeader("x-rpc-validate", v.Validate)
 		}
 	}
 	return r

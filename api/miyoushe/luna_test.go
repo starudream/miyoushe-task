@@ -22,12 +22,12 @@ func GetSR(t *testing.T) (string, string, string) {
 
 func TestSignLuna(t *testing.T) {
 	actId, region, uid := GetSR(t)
-	data, err := SignLuna(actId, region, uid, GetAccount(t))
+	data, err := SignLuna(actId, region, uid, GetAccount(t), nil)
 	if IsRetCode(err, RetCodeLunaHasSigned) {
 		t.Skip("luna has signed")
 	}
 	testutil.LogNoErr(t, err, data)
-	testutil.Equal(t, true, data.IsSuccess())
+	testutil.Equal(t, false, data.IsRisky())
 }
 
 func TestGetLunaToday(t *testing.T) {

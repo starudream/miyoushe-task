@@ -19,13 +19,13 @@ type SignLunaData struct {
 	Gt        string `json:"gt"`
 }
 
-func (t *SignLunaData) IsSuccess() bool {
-	return !t.IsRisk && t.RiskCode == 0
+func (t *SignLunaData) IsRisky() bool {
+	return t.IsRisk && t.RiskCode == 5001
 }
 
-func SignLuna(actId, region, uid string, account config.Account) (*SignLunaData, error) {
+func SignLuna(actId, region, uid string, account config.Account, validate *Validate) (*SignLunaData, error) {
 	body := gh.MS{"lang": LangZHCN, "act_id": actId, "region": region, "uid": uid}
-	return Exec[*SignLunaData](R(account.Device).SetCookies(hcSToken(account)).SetCookies(hcCToken(account)).SetBody(body), "POST", AddrTakumi+"/event/luna/sign")
+	return Exec[*SignLunaData](R(account.Device, validate).SetCookies(hcSToken(account)).SetCookies(hcCToken(account)).SetBody(body), "POST", AddrTakumi+"/event/luna/sign")
 }
 
 type GetLunaTodayData struct {

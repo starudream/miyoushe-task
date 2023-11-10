@@ -77,14 +77,33 @@ func SignLunaGame(roles []*miyoushe.GameRole, account config.Account) (map[strin
 
 		slog.Info("attempt to sign luna %s %s (%s)", game.Name, role.Nickname, role.GameUid)
 
-		res1, err := miyoushe.SignLuna(actId, role.Region, role.GameUid, account)
+		var validate *miyoushe.Validate
+
+		retry := config.C().DMRetry
+
+	sign:
+
+		res1, err := miyoushe.SignLuna(actId, role.Region, role.GameUid, account, validate)
 		if err != nil {
 			if !miyoushe.IsRetCode(err, miyoushe.RetCodeLunaHasSigned) {
 				return nil, fmt.Errorf("sign luna error: %w", err)
 			}
 			slog.Info("luna has signed")
-		} else if !res1.IsSuccess() {
-			return nil, fmt.Errorf("sign luna error maybe risk: %d", res1.RiskCode)
+		} else if res1.IsRisky() {
+			slog.Warn("sign luna maybe risk, gt: %s, challenge: %s", res1.Gt, res1.Challenge)
+			if retry < 0 {
+				return nil, fmt.Errorf("dm retry limit exceeded")
+			}
+			slog.Info("attempt to dm bypass verification")
+			validate, err = DM(res1)
+			if err != nil {
+				return nil, fmt.Errorf("dm error: %w", err)
+			}
+			if validate == nil {
+				return nil, fmt.Errorf("sign luna maybe risk")
+			}
+			retry--
+			goto sign
 		}
 
 		res2, err := miyoushe.ListLunaAward(actId, role.Region, role.GameUid, account)

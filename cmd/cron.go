@@ -34,8 +34,7 @@ func init() {
 }
 
 func cronRun() {
-	c := config.C()
-	for i := 0; i < len(c.Accounts); i++ {
+	for i := 0; i < len(config.C().Accounts); i++ {
 		cronBBSAccount(config.C().Accounts[i])
 		cronLunaAccount(config.C().Accounts[i])
 	}

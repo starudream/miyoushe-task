@@ -58,6 +58,11 @@ func WaitQRCodeConfirmed(ticket string, account config.Account) (config.Account,
 }
 
 func Refresh(account config.Account) (_ config.Account, err error) {
+	_, err = miyoushe.GetUser("", account)
+	if err == nil {
+		return account, err
+	}
+
 	account, err = RefreshSToken(account)
 	if err != nil {
 		return
