@@ -73,8 +73,8 @@ github.com/starudream/go-lib/core/v2 v2.0.4 h1:dkRMebKaVe/jVh7mOX2oTosnX/2R4OqmO
 github.com/starudream/go-lib/core/v2 v2.0.4/go.mod h1:jCaVxSBgRwvYNAe9Wf0smZLZwRLNxtHywgrxTb5eTCM=
 github.com/starudream/go-lib/cron/v2 v2.0.1 h1:v/OGyRFwNHFoUOsJXI0Pn4lbdztB89agZaGJzxkrvW0=
 github.com/starudream/go-lib/cron/v2 v2.0.1/go.mod h1:XysGo8YkrVvg5MGbDOuVgWmiJjt93gCHCDMeT0sn50k=
-github.com/starudream/go-lib/ntfy/v2 v2.0.2 h1:ilLlZRk1PoTHO1UsFk+2wLv9OsBi7y2GSpdD4M+QnnA=
-github.com/starudream/go-lib/ntfy/v2 v2.0.2/go.mod h1:QmkjPMYHFLzxeh6zjGWn2J+dTFJK0KTCXk+uzKrTBuI=
+github.com/starudream/go-lib/ntfy/v2 v2.0.3 h1:S75vO0qr3i2UUFwv28KbPAE98TkbT49R6d7uBRgS77k=
+github.com/starudream/go-lib/ntfy/v2 v2.0.3/go.mod h1:QmkjPMYHFLzxeh6zjGWn2J+dTFJK0KTCXk+uzKrTBuI=
 github.com/starudream/go-lib/resty/v2 v2.0.1 h1:wzQbj07rINEg0kE4IrK67wlVegVl0O3j9okZchn0X34=
 github.com/starudream/go-lib/resty/v2 v2.0.1/go.mod h1:vZsbF8d0syHRmJvAc03x56PysF+YNnAqbzVDp7M5VTI=
 github.com/starudream/go-lib/tablew/v2 v2.0.3 h1:ACy8ASOVeog1qQb57iUffgSLeF8Ebb/Ju0aymOY4TFA=
