@@ -32,7 +32,7 @@ cron:
 
 # 打码平台配置，游戏福利签到可能需要打码，可选
 dm:
-    retry: "在打码失败后尝试次数，默认 1"
+    retry: "打码重试次数，默认 0"
 rrocr:
     key: ""
 ```
@@ -125,7 +125,8 @@ services:
       app.log.file.enabled: "true"
       app.log.file.level: "debug"
       app.log.file.filename: "/miyoushe/app.log"
-      app.cron.spec: "0 40 8 * * *"
+      app.ntfy.weixin_work.key: "foo"
+      app.cron.spec: "0 0 8 * * *"
       app.rrocr.key: "foo"
 ```
 
