@@ -8,10 +8,10 @@ import (
 	"github.com/starudream/miyoushe-task/util/ocr"
 )
 
-func DM(data *miyoushe.SignLunaData) (*miyoushe.Validate, error) {
+func DM(gt, challenge string) (*miyoushe.Validate, error) {
 	if key := config.C().RROCRKey; key != "" {
 		slog.Info("attempt to dm using rrocr, please wait a moment")
-		return ocr.RR(key, data.Gt, data.Challenge, miyoushe.RefererAct)
+		return ocr.RR(key, gt, challenge, miyoushe.RefererAct)
 	}
 	return nil, nil
 }

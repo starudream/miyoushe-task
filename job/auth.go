@@ -63,6 +63,11 @@ func Refresh(account config.Account) (_ config.Account, err error) {
 		return account, err
 	}
 
+	// err = miyoushe.BBSLogin(account)
+	// if err == nil {
+	// 	return
+	// }
+
 	account, err = RefreshSToken(account)
 	if err != nil {
 		return

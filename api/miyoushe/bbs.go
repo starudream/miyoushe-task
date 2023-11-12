@@ -40,6 +40,6 @@ type SignBBSData struct {
 	Points int `json:"points"`
 }
 
-func SignBBS(gameId string, account config.Account) (*SignBBSData, error) {
-	return Exec[*SignBBSData](R(account.Device).SetCookies(hcSToken(account)).SetBody(gh.M{"gids": gameId}), "POST", AddrBBS+"/apihub/app/api/signIn", 2)
+func SignBBS(gameId string, account config.Account, validate *Validate) (*SignBBSData, error) {
+	return Exec[*SignBBSData](R(account.Device, validate).SetCookies(hcSToken(account)).SetBody(gh.M{"gids": gameId}), "POST", AddrBBS+"/apihub/app/api/signIn", 2)
 }

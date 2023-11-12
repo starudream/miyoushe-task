@@ -87,6 +87,11 @@ type TokenInfo struct {
 	Token     string `json:"token"`
 }
 
+func BBSLogin(account config.Account) error {
+	_, err := Exec[any](R(account.Device).SetCookies(hcSToken(account)).SetBody(gh.M{"source_id": "", "source_key": "", "source_name": "", "source_type": 0}), "POST", AddrBBS+"/user/api/login")
+	return err
+}
+
 // GetSTokenByGToken get stoken v2 by game token
 // https://github.com/UIGF-org/mihoyo-api-collect/blob/3a9116ea538941cfead749572df1f364cb9f9c8d/hoyolab/user/token.md#%E9%80%9A%E8%BF%87game-token%E8%8E%B7%E5%8F%96stokenv1
 func GetSTokenByGToken(account config.Account) (*GetSTokenByGTokenData, error) {
@@ -116,4 +121,24 @@ type GetLTokenBySTokenData struct {
 // https://github.com/UIGF-org/mihoyo-api-collect/blob/3a9116ea538941cfead749572df1f364cb9f9c8d/hoyolab/user/token.md#%E9%80%9A%E8%BF%87stoken%E8%8E%B7%E5%8F%96ltokenv1
 func GetLTokenBySToken(account config.Account) (*GetLTokenBySTokenData, error) {
 	return Exec[*GetLTokenBySTokenData](R(account.Device).SetCookies(hcSToken(account)), "GET", AddrTakumi+"/account/auth/api/getLTokenBySToken")
+}
+
+type CreateVerificationData struct {
+	Challenge  string `json:"challenge"`
+	Gt         string `json:"gt"`
+	NewCaptcha int    `json:"new_captcha"`
+	Success    int    `json:"success"`
+}
+
+func CreateVerification(account config.Account) (*CreateVerificationData, error) {
+	return Exec[*CreateVerificationData](R(account.Device).SetCookies(hcSToken(account)), "GET", AddrBBS+"/misc/api/createVerification?is_high=true")
+}
+
+type VerifyVerificationData struct {
+	Challenge string `json:"challenge"`
+}
+
+func VerifyVerification(challenge, validate string, account config.Account) (*VerifyVerificationData, error) {
+	body := gh.M{"geetest_challenge": challenge, "geetest_seccode": validate + "|jordan", "geetest_validate": validate}
+	return Exec[*VerifyVerificationData](R(account.Device).SetCookies(hcSToken(account)).SetBody(body), "POST", AddrBBS+"/misc/api/verifyVerification")
 }

@@ -19,7 +19,7 @@ func TestGetBBSHome(t *testing.T) {
 }
 
 func TestSignBBS(t *testing.T) {
-	data, err := SignBBS(GameIdSR, GetAccount(t))
+	data, err := SignBBS(GameIdSR, GetAccount(t), nil)
 	if IsRetCode(err, RetCodeBBSHasSigned) {
 		t.Skip("bbs has signed")
 	}

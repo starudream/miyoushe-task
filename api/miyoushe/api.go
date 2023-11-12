@@ -39,9 +39,10 @@ const (
 	GameIdYS = "2" // 原神
 	GameIdSR = "6" // 崩坏：星穹铁道
 
-	RetCodeQRCodeExpired = -106  // 二维码过期
-	RetCodeLunaHasSigned = -5003 // 已签到
-	RetCodeBBSHasSigned  = 1008  // 打卡失败或重复打卡
+	RetCodeQRCodeExpired   = -106  // 二维码过期
+	RetCodeLunaHasSigned   = -5003 // 已签到
+	RetCodeBBSHasSigned    = 1008  // 打卡失败或重复打卡
+	RetCodeBBSNeedValidate = 1034  // 需要验证码
 
 	gameJSON = `[{"id":1,"name":"崩坏3","en_name":"bh3","op_name":"bh3"},{"id":2,"name":"原神","en_name":"ys","op_name":"hk4e"},{"id":3,"name":"崩坏学园2","en_name":"bh2","op_name":"bh2"},{"id":4,"name":"未定事件簿","en_name":"wd","op_name":"nxx"},{"id":5,"name":"大别野","en_name":"dby","op_name":"plat"},{"id":6,"name":"崩坏：星穹铁道","en_name":"sr","op_name":"hkrpg"},{"id":8,"name":"绝区零","en_name":"zzz","op_name":"nap"}]`
 )

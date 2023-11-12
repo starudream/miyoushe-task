@@ -53,6 +53,11 @@ func TestQueryQRCode(t *testing.T) {
 	testutil.LogNoErr(t, err, data)
 }
 
+func TestBBSLogin(t *testing.T) {
+	err := BBSLogin(GetAccount(t))
+	testutil.LogNoErr(t, err)
+}
+
 func TestGetSTokenByGToken(t *testing.T) {
 	data, err := GetSTokenByGToken(GetAccount(t))
 	testutil.LogNoErr(t, err, data)
@@ -65,5 +70,15 @@ func TestGetCTokenBySToken(t *testing.T) {
 
 func TestGetLTokenBySToken(t *testing.T) {
 	data, err := GetLTokenBySToken(GetAccount(t))
+	testutil.LogNoErr(t, err, data)
+}
+
+func TestCreateVerification(t *testing.T) {
+	data, err := CreateVerification(GetAccount(t))
+	testutil.LogNoErr(t, err, data)
+}
+
+func TestVerifyVerification(t *testing.T) {
+	data, err := VerifyVerification("", "", GetAccount(t))
 	testutil.LogNoErr(t, err, data)
 }
