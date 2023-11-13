@@ -39,6 +39,9 @@ const (
 	GameIdYS = "2" // 原神
 	GameIdSR = "6" // 崩坏：星穹铁道
 
+	ForumIdYS = "28" // 原神
+	ForumIdSR = "53" // 崩坏：星穹铁道
+
 	RetCodeQRCodeExpired   = -106  // 二维码过期
 	RetCodeLunaHasSigned   = -5003 // 已签到
 	RetCodeBBSHasSigned    = 1008  // 打卡失败或重复打卡

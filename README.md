@@ -27,7 +27,7 @@ accounts:
     stoken: "stoken v2"
 
 cron:
-  spec: "签到奖励执行时间，默认 0 0 8 * * * 即每天 08:00:00"
+  spec: "签到奖励执行时间，默认 5 4 8 * * * 即每天 08:04:05"
   startup: "是否启动时执行一次，默认 false"
 
 # 打码平台配置
@@ -73,6 +73,13 @@ miyoushe-task account login <account phone>
 ```shell
 # manual sign bbs for input account phone
 miyoushe-task sign bbs <account phone>
+```
+
+### SignPost `版区帖子`
+
+```shell
+# manual sign bbs for input account phone
+miyoushe-task sign post <account phone>
 ```
 
 ### SignLuna `福利签到`
@@ -124,7 +131,7 @@ services:
       app.log.file.level: "debug"
       app.log.file.filename: "/miyoushe/app.log"
       app.ntfy.weixin_work.key: "foo"
-      app.cron.spec: "0 0 8 * * *"
+      app.cron.spec: "5 4 8 * * *"
       app.rrocr.key: "foo"
 ```
 

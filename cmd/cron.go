@@ -36,6 +36,7 @@ func init() {
 func cronRun() {
 	for i := 0; i < len(config.C().Accounts); i++ {
 		cronBBSAccount(config.C().Accounts[i])
+		cronPostAccount(config.C().Accounts[i])
 		cronLunaAccount(config.C().Accounts[i])
 	}
 }
@@ -47,6 +48,22 @@ func cronBBSAccount(account config.Account) (msg string) {
 		slog.Error(msg)
 	} else {
 		msg = account.Phone + " 米游社打卡成功"
+		slog.Info(msg)
+	}
+	err = ntfy.Notify(context.Background(), msg)
+	if err != nil {
+		slog.Error("cron miyoushe notify error: %v", err)
+	}
+	return
+}
+
+func cronPostAccount(account config.Account) (msg string) {
+	err := job.SignPost("", account)
+	if err != nil {
+		msg = fmt.Sprintf("米游社帖子任务失败: %v", err)
+		slog.Error(msg)
+	} else {
+		msg = account.Phone + " 米游社帖子任务成功"
 		slog.Info(msg)
 	}
 	err = ntfy.Notify(context.Background(), msg)

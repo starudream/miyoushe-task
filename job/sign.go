@@ -18,7 +18,7 @@ func SignBBS(gameId string, account config.Account) (err error) {
 
 	account, err = Refresh(account)
 	if err != nil {
-		return err
+		return
 	}
 
 	game := miyoushe.GameById[gameId]
@@ -46,6 +46,70 @@ sign:
 	}
 
 	slog.Info("sign bbs %s success and got %d points", game.Name, res.Points)
+	return nil
+}
+
+func SignPost(forumId string, account config.Account) (err error) {
+	if forumId == "" {
+		forumId = miyoushe.ForumIdSR
+	}
+
+	account, err = Refresh(account)
+	if err != nil {
+		return
+	}
+
+	var (
+		cntLoop   = 3
+		cntView   = 3
+		cntUpvote = 5
+		cntShare  = 1
+		lastId    = ""
+	)
+
+loop:
+
+	cntLoop--
+
+	res, err := miyoushe.ListPost(forumId, lastId, account)
+	if err != nil {
+		return fmt.Errorf("list post error: %w", err)
+	}
+	lastId = res.LastId
+
+	for i := 0; i < len(res.List); i++ {
+		p := res.List[i]
+		if cntView > 0 {
+			_, err = miyoushe.GetPost(p.Post.PostId, account)
+			if err != nil {
+				slog.Error("get post error: %w", err)
+				continue
+			}
+			cntView--
+		}
+		if cntUpvote > 0 && !p.IsUpvote() {
+			err = miyoushe.UpvotePost(p.Post.PostId, account)
+			if err != nil {
+				slog.Error("upvote post error: %w", err)
+				continue
+			}
+			cntUpvote--
+		}
+		if cntShare > 0 {
+			_, err = miyoushe.SharePost(p.Post.PostId, account)
+			if err != nil {
+				slog.Error("share post error: %w", err)
+				continue
+			}
+			cntShare--
+		}
+	}
+
+	if cntLoop > 0 && (cntView > 0 || cntUpvote > 0 || cntShare > 0) {
+		slog.Info("attempt to sign post again, left view: %d, upvote: %d, share: %d", cntView, cntUpvote, cntShare)
+		goto loop
+	}
+
 	return nil
 }
 

@@ -11,13 +11,17 @@ import (
 
 type BBSHome struct {
 	Navigator []*BBSNavigator `json:"navigator"`
+	Official  *BBSOfficial    `json:"official"`
 }
 
 type BBSNavigator struct {
 	Id      int    `json:"id"`
 	Name    string `json:"name"`
-	Icon    string `json:"icon"`
 	AppPath string `json:"app_path"`
+}
+
+type BBSOfficial struct {
+	ForumId int `json:"forum_id"`
 }
 
 func (h *BBSHome) GetLunaActId() string {

@@ -38,6 +38,28 @@ var (
 		}
 	})
 
+	signPostCmd = cobra.NewCommand(func(c *cobra.Command) {
+		c.Use = "post <account phone> <forum id>"
+		c.Short = "Miyoushe post"
+		c.Args = func(cmd *cobra.Command, args []string) error {
+			phone, _ := sliceutil.GetValue(args, 0)
+			if phone == "" {
+				return fmt.Errorf("requires account phone")
+			}
+			_, exists := config.GetAccount(phone)
+			if !exists {
+				return fmt.Errorf("account %s not exists", phone)
+			}
+			return nil
+		}
+		c.RunE = func(cmd *cobra.Command, args []string) error {
+			phone, _ := sliceutil.GetValue(args, 0)
+			forumId, _ := sliceutil.GetValue(args, 1)
+			account, _ := config.GetAccount(phone)
+			return job.SignPost(forumId, account)
+		}
+	})
+
 	signLunaCmd = cobra.NewCommand(func(c *cobra.Command) {
 		c.Use = "luna <account phone>"
 		c.Short = "Game award"
