@@ -30,9 +30,7 @@ cron:
   spec: "签到奖励执行时间，默认 0 0 8 * * * 即每天 08:00:00"
   startup: "是否启动时执行一次，默认 false"
 
-# 打码平台配置，游戏福利签到可能需要打码，可选
-dm:
-    retry: "打码重试次数，默认 0"
+# 打码平台配置
 rrocr:
     key: ""
 ```
@@ -70,7 +68,7 @@ miyoushe-task account init <account phone>
 miyoushe-task account login <account phone>
 ```
 
-### SignBBS `版区签到`
+### SignBBS `版区打卡`
 
 ```shell
 # manual sign bbs for input account phone

@@ -3,6 +3,7 @@ package job
 import (
 	"bytes"
 	"fmt"
+	"strings"
 
 	"github.com/starudream/go-lib/core/v2/slog"
 
@@ -34,9 +35,10 @@ sign:
 			slog.Info("bbs has signed")
 			return nil
 		} else if miyoushe.IsRetCode(err, miyoushe.RetCodeBBSNeedValidate) {
+			slog.Warn("sign bbs need verification code, attempt to dm bypass verification")
 			validate, err = Verify(account)
 			if err != nil {
-				return fmt.Errorf("verify error: %w", err)
+				return err
 			}
 			goto sign
 		}
@@ -45,28 +47,6 @@ sign:
 
 	slog.Info("sign bbs %s success and got %d points", game.Name, res.Points)
 	return nil
-}
-
-func Verify(account config.Account) (validate *miyoushe.Validate, _ error) {
-	res, err := miyoushe.CreateVerification(account)
-	if err != nil {
-		return nil, fmt.Errorf("create verification error: %w", err)
-	}
-
-	validate, err = DM(res.Gt, res.Challenge)
-	if err != nil {
-		return nil, fmt.Errorf("dm error: %w", err)
-	}
-	if validate == nil {
-		return nil, fmt.Errorf("verify maybe risk")
-	}
-
-	_, err = miyoushe.VerifyVerification(validate.Challenge, validate.Validate, account)
-	if err != nil {
-		return nil, fmt.Errorf("verify verification error: %w", err)
-	}
-
-	return validate, nil
 }
 
 func SignLuna(account config.Account) (_ map[string]map[string]string, err error) {
@@ -111,8 +91,6 @@ func SignLunaGame(roles []*miyoushe.GameRole, account config.Account) (map[strin
 
 		var validate *miyoushe.Validate
 
-		retry := config.C().DMRetry
-
 	sign:
 
 		res1, err := miyoushe.SignLuna(actId, role.Region, role.GameUid, account, validate)
@@ -122,19 +100,11 @@ func SignLunaGame(roles []*miyoushe.GameRole, account config.Account) (map[strin
 			}
 			slog.Info("luna has signed")
 		} else if res1.IsRisky() {
-			slog.Warn("sign luna maybe risk, gt: %s, challenge: %s", res1.Gt, res1.Challenge)
-			if retry < 0 {
-				return nil, fmt.Errorf("dm retry limit exceeded")
-			}
-			slog.Info("attempt to dm bypass verification")
+			slog.Warn("sign luna need verification code, attempt to dm bypass verification")
 			validate, err = DM(res1.Gt, res1.Challenge)
 			if err != nil {
-				return nil, fmt.Errorf("dm error: %w", err)
+				return nil, err
 			}
-			if validate == nil {
-				return nil, fmt.Errorf("sign luna maybe risk")
-			}
-			retry--
 			goto sign
 		}
 
@@ -181,5 +151,5 @@ func FormatAwards(awards map[string]map[string]string) string {
 			buf.WriteString("\n")
 		}
 	}
-	return buf.String()
+	return strings.TrimSuffix(buf.String(), "\n")
 }

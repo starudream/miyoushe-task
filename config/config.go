@@ -17,7 +17,6 @@ type Config struct {
 	Cron     Cron      `json:"cron"     yaml:"cron"`
 
 	// 打码接口
-	DMRetry  int    `json:"dm.retry"  yaml:"dm.retry"`
 	RROCRKey string `json:"rrocr.key" yaml:"rrocr.key"`
 }
 
