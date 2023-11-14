@@ -36,7 +36,8 @@ func (h *Home) GetSignActId() string {
 }
 
 func GetHome(gameId string) (*Home, error) {
-	return common.Exec[*Home](common.R().SetQueryParam("gids", gameId), "GET", AddrBBS+"/apihub/api/home/new")
+	req := common.R().SetQueryParam("gids", gameId)
+	return common.Exec[*Home](req, "GET", AddrBBS+"/apihub/api/home/new")
 }
 
 type GetBusinessesData struct {

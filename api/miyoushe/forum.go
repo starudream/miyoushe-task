@@ -60,12 +60,14 @@ type PostSelfOperation struct {
 
 func ListPost(forumId, lastId string, account config.Account) (*ListPostData, error) {
 	query := gh.MS{"forum_id": forumId, "is_good": "false", "is_hot": "false", "sort_type": "1", "last_id": lastId, "page_size": "10"}
-	return common.Exec[*ListPostData](common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParams(query), "GET", AddrTakumi+"/post/api/getForumPostList")
+	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParams(query)
+	return common.Exec[*ListPostData](req, "GET", AddrTakumi+"/post/api/getForumPostList")
 }
 
 func ListFeedPost(gameId string, account config.Account) (*ListPostData, error) {
 	query := gh.MS{"gids": gameId, "fresh_action": "1", "is_first_initialize": "true"}
-	return common.Exec[*ListPostData](common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParams(query), "GET", AddrBBS+"/post/api/feeds/posts")
+	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParams(query)
+	return common.Exec[*ListPostData](req, "GET", AddrBBS+"/post/api/feeds/posts")
 }
 
 type GetPostData struct {
