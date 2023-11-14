@@ -59,7 +59,7 @@ func SignGameRoles(roles []*miyoushe.GameRole, account config.Account) (SignGame
 		record, err := SignGameRole(role, account)
 		slog.Info("sign game record: %+v", record)
 		if err != nil {
-			slog.Error("sign game record error: %v", err)
+			slog.Error("sign game error: %v", err)
 			continue
 		}
 		records = append(records, record)
