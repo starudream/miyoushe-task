@@ -8,7 +8,7 @@ import (
 	"github.com/starudream/go-lib/core/v2/utils/sliceutil"
 	"github.com/starudream/go-lib/tablew/v2"
 
-	"github.com/starudream/miyoushe-task/api/miyoushe"
+	"github.com/starudream/miyoushe-task/api/mihoyo"
 	"github.com/starudream/miyoushe-task/config"
 	"github.com/starudream/miyoushe-task/job"
 	"github.com/starudream/miyoushe-task/util"
@@ -44,29 +44,17 @@ var (
 	accountLoginCmd = cobra.NewCommand(func(c *cobra.Command) {
 		c.Use = "login <account phone>"
 		c.Short = "Login account"
-		c.Args = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			if phone == "" {
-				return fmt.Errorf("requires account phone")
-			}
-			_, exists := config.GetAccount(phone)
-			if !exists {
-				return fmt.Errorf("account %s not exists", phone)
-			}
-			return nil
-		}
 		c.RunE = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			account, _ := config.GetAccount(phone)
+			account := xGetAccount(args)
 
-			res1, err := miyoushe.GenQRCode(account)
+			res, err := mihoyo.GenQRCode(account)
 			if err != nil {
 				return fmt.Errorf("generate qrcode error: %w", err)
 			}
-			slog.Info("qrcode content: %s", res1.Url)
-			fmt.Printf("\n\n%s\n\n", util.QRCode(res1.Url))
+			slog.Info("qrcode content: %s", res.Url)
+			fmt.Printf("\n\n%s\n\n", util.QRCode(res.Url))
 
-			account, err = job.WaitQRCodeConfirmed(res1.Ticket, account)
+			account, err = job.WaitQRCodeConfirmed(res.Ticket, account)
 			if err != nil {
 				return err
 			}
@@ -74,8 +62,17 @@ var (
 				return nil
 			}
 
-			_, err = job.Refresh(account)
-			return err
+			account, err = job.RefreshCToken(account)
+			if err != nil {
+				return err
+			}
+			account, err = job.RefreshSToken(account)
+			if err != nil {
+				return err
+			}
+
+			slog.Info("login success")
+			return nil
 		}
 	})
 

@@ -1,12 +1,8 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/starudream/go-lib/cobra/v2"
-	"github.com/starudream/go-lib/core/v2/utils/sliceutil"
 
-	"github.com/starudream/miyoushe-task/config"
 	"github.com/starudream/miyoushe-task/job"
 )
 
@@ -16,76 +12,28 @@ var (
 		c.Short = "Run sign task"
 	})
 
-	signBBSCmd = cobra.NewCommand(func(c *cobra.Command) {
-		c.Use = "bbs <account phone> <game id>"
-		c.Short = "Miyoushe bbs"
-		c.Args = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			if phone == "" {
-				return fmt.Errorf("requires account phone")
-			}
-			_, exists := config.GetAccount(phone)
-			if !exists {
-				return fmt.Errorf("account %s not exists", phone)
-			}
-			return nil
-		}
+	signForumCmd = cobra.NewCommand(func(c *cobra.Command) {
+		c.Use = "forum <account phone>"
+		c.Short = "Miyoushe forum task"
 		c.RunE = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			gameId, _ := sliceutil.GetValue(args, 1)
-			account, _ := config.GetAccount(phone)
-			return job.SignBBS(gameId, account)
+			_, err := job.SignForum(xGetAccount(args))
+			return err
 		}
 	})
 
-	signPostCmd = cobra.NewCommand(func(c *cobra.Command) {
-		c.Use = "post <account phone> <forum id>"
-		c.Short = "Miyoushe post"
-		c.Args = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			if phone == "" {
-				return fmt.Errorf("requires account phone")
-			}
-			_, exists := config.GetAccount(phone)
-			if !exists {
-				return fmt.Errorf("account %s not exists", phone)
-			}
-			return nil
-		}
+	signGameCmd = cobra.NewCommand(func(c *cobra.Command) {
+		c.Use = "game <account phone>"
+		c.Short = "Miyoushe game award"
 		c.RunE = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			forumId, _ := sliceutil.GetValue(args, 1)
-			account, _ := config.GetAccount(phone)
-			return job.SignPost(forumId, account)
-		}
-	})
-
-	signLunaCmd = cobra.NewCommand(func(c *cobra.Command) {
-		c.Use = "luna <account phone>"
-		c.Short = "Game award"
-		c.Args = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			if phone == "" {
-				return fmt.Errorf("requires account phone")
-			}
-			_, exists := config.GetAccount(phone)
-			if !exists {
-				return fmt.Errorf("account %s not exists", phone)
-			}
-			return nil
-		}
-		c.RunE = func(cmd *cobra.Command, args []string) error {
-			phone, _ := sliceutil.GetValue(args, 0)
-			account, _ := config.GetAccount(phone)
-			_, err := job.SignLuna(account)
+			_, err := job.SignGame(xGetAccount(args))
 			return err
 		}
 	})
 )
 
 func init() {
-	signCmd.AddCommand(signBBSCmd)
-	signCmd.AddCommand(signLunaCmd)
+	signCmd.AddCommand(signForumCmd)
+	signCmd.AddCommand(signGameCmd)
 
 	rootCmd.AddCommand(signCmd)
 }

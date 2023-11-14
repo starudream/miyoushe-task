@@ -68,39 +68,22 @@ miyoushe-task account init <account phone>
 miyoushe-task account login <account phone>
 ```
 
-### SignBBS `版区打卡`
+### SignForum `米游社每日任务`
 
 ```shell
-# manual sign bbs for input account phone
-miyoushe-task sign bbs <account phone>
+miyoushe-task sign forum <account phone>
 ```
 
-### SignPost `版区帖子`
+### SignGame `米游社游戏签到`
 
 ```shell
-# manual sign bbs for input account phone
-miyoushe-task sign post <account phone>
+miyoushe-task sign game <account phone>
 ```
 
-### SignLuna `福利签到`
+### Cron
 
 ```shell
-# manual sign luna for input account phone
-miyoushe-task sign luna <account phone>
-```
-
-### Config
-
-```shell
-# write config to file
-miyoushe-task config save
-```
-
-### Notify
-
-```shell
-# test notify
-miyoushe-task notify send <message>
+miyoushe-task cron
 ```
 
 ## Docker
@@ -109,7 +92,7 @@ miyoushe-task notify send <message>
 mkdir miyoushe && touch miyoushe/app.yaml
 docker run -it --rm -v $(pwd)/miyoushe:/miyoushe -e DEBUG=true starudream/miyoushe-task /miyoushe-task -c /miyoushe/app.yaml account init <account phone>
 docker run -it --rm -v $(pwd)/miyoushe:/miyoushe -e DEBUG=true starudream/miyoushe-task /miyoushe-task -c /miyoushe/app.yaml account login <account phone>
-docker run -it --rm -v $(pwd)/miyoushe:/miyoushe -e DEBUG=true starudream/miyoushe-task /miyoushe-task -c /miyoushe/app.yaml sign luna <account phone>
+docker run -it --rm -v $(pwd)/miyoushe:/miyoushe -e DEBUG=true starudream/miyoushe-task /miyoushe-task -c /miyoushe/app.yaml sign game <account phone>
 ```
 
 ## Docker Compose

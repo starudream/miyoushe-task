@@ -2,85 +2,22 @@ package job
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/starudream/go-lib/core/v2/slog"
-	"github.com/starudream/go-lib/core/v2/utils/signalutil"
-
+	"github.com/starudream/miyoushe-task/api/mihoyo"
 	"github.com/starudream/miyoushe-task/api/miyoushe"
 	"github.com/starudream/miyoushe-task/config"
 )
 
-func WaitQRCodeConfirmed(ticket string, account config.Account) (config.Account, error) {
-	ticker := time.NewTicker(3 * time.Second)
-
-	for {
-		select {
-		case <-signalutil.Done():
-			return account, nil
-
-		case <-ticker.C:
-			res2, err := miyoushe.QueryQRCode(ticket, account)
-			if err != nil {
-				if miyoushe.IsRetCode(err, miyoushe.RetCodeQRCodeExpired) {
-					return account, fmt.Errorf("qrcode expired, please try again")
-				}
-				return account, fmt.Errorf("query qrcode error: %w", err)
-			}
-
-			switch {
-			case res2.Stat.IsInit():
-				slog.Info("qrcode not scanned")
-				continue
-			case res2.Stat.IsScanned():
-				slog.Info("qrcode scanned, please confirm login")
-				continue
-			case res2.Stat.IsConfirmed():
-				slog.Info("qrcode confirmed, login success")
-			default:
-				return account, fmt.Errorf("unknown qrcode stat: %s", res2.Stat)
-			}
-
-			account.Uid = res2.Payload.Uid
-			account.GToken = res2.Payload.Token
-
-			config.UpdateAccount(account.Phone, func(config.Account) config.Account {
-				return account
-			})
-			err = config.Save()
-			if err != nil {
-				return account, fmt.Errorf("save account error: %w", err)
-			}
-
-			return account, nil
-		}
-	}
-}
-
-func Refresh(account config.Account) (_ config.Account, err error) {
-	_, err = miyoushe.GetUser("", account)
-	if err == nil {
-		return account, err
-	}
-
-	// err = miyoushe.BBSLogin(account)
-	// if err == nil {
-	// 	return
-	// }
-
-	account, err = RefreshSToken(account)
+func Refresh(account config.Account) (config.Account, error) {
+	_, err := miyoushe.GetUser("", account)
 	if err != nil {
-		return
-	}
-	account, err = RefreshCToken(account)
-	if err != nil {
-		return
+		return RefreshSToken(account)
 	}
 	return account, nil
 }
 
 func RefreshSToken(account config.Account) (config.Account, error) {
-	res, err := miyoushe.GetSTokenByGToken(account)
+	res, err := mihoyo.GetSTokenByGToken(account)
 	if err != nil {
 		return account, fmt.Errorf("get stoken error: %w", err)
 	}
@@ -97,9 +34,9 @@ func RefreshSToken(account config.Account) (config.Account, error) {
 }
 
 func RefreshCToken(account config.Account) (config.Account, error) {
-	res, err := miyoushe.GetCTokenBySToken(account)
+	res, err := mihoyo.GetCTokenBySToken(account)
 	if err != nil {
-		return account, fmt.Errorf("get stoken error: %w", err)
+		return account, fmt.Errorf("get ctoken error: %w", err)
 	}
 	account.CToken = res.CookieToken
 

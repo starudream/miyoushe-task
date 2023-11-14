@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"slices"
 
+	"github.com/starudream/miyoushe-task/api/common"
 	"github.com/starudream/miyoushe-task/config"
 )
 
@@ -19,7 +20,7 @@ type Game struct {
 }
 
 func ListGame() (*ListGameData, error) {
-	data, err := Exec[*ListGameData](R(), "GET", AddrBBS+"/apihub/api/getGameList")
+	data, err := common.Exec[*ListGameData](common.R(), "GET", AddrBBS+"/apihub/api/getGameList")
 	if err != nil {
 		return nil, err
 	}
@@ -43,5 +44,6 @@ type GameRole struct {
 }
 
 func ListGameRole(gameBiz string, account config.Account) (*ListGameRoleData, error) {
-	return Exec[*ListGameRoleData](R(account.Device).SetCookies(hcSToken(account)).SetQueryParam("game_biz", gameBiz), "GET", AddrTakumi+"/binding/api/getUserGameRolesByStoken")
+	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParam("game_biz", gameBiz)
+	return common.Exec[*ListGameRoleData](req, "GET", AddrTakumi+"/binding/api/getUserGameRolesByStoken")
 }

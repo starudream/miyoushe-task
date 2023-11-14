@@ -35,19 +35,18 @@ func init() {
 
 func cronRun() {
 	for i := 0; i < len(config.C().Accounts); i++ {
-		cronBBSAccount(config.C().Accounts[i])
-		cronPostAccount(config.C().Accounts[i])
-		cronLunaAccount(config.C().Accounts[i])
+		cronForumAccount(config.C().Accounts[i])
+		cronGameAccount(config.C().Accounts[i])
 	}
 }
 
-func cronBBSAccount(account config.Account) (msg string) {
-	err := job.SignBBS("", account)
+func cronForumAccount(account config.Account) (msg string) {
+	record, err := job.SignForum(account)
 	if err != nil {
-		msg = fmt.Sprintf("米游社打卡失败: %v", err)
+		msg = fmt.Sprintf("%s: %v", record.Name(), err)
 		slog.Error(msg)
 	} else {
-		msg = account.Phone + " 米游社打卡成功"
+		msg = account.Phone + " " + record.Success()
 		slog.Info(msg)
 	}
 	err = ntfy.Notify(context.Background(), msg)
@@ -57,29 +56,13 @@ func cronBBSAccount(account config.Account) (msg string) {
 	return
 }
 
-func cronPostAccount(account config.Account) (msg string) {
-	err := job.SignPost("", account)
+func cronGameAccount(account config.Account) (msg string) {
+	records, err := job.SignGame(account)
 	if err != nil {
-		msg = fmt.Sprintf("米游社帖子任务失败: %v", err)
+		msg = fmt.Sprintf("%s: %v", records.Name(), err)
 		slog.Error(msg)
 	} else {
-		msg = account.Phone + " 米游社帖子任务成功"
-		slog.Info(msg)
-	}
-	err = ntfy.Notify(context.Background(), msg)
-	if err != nil {
-		slog.Error("cron miyoushe notify error: %v", err)
-	}
-	return
-}
-
-func cronLunaAccount(account config.Account) (msg string) {
-	awards, err := job.SignLuna(account)
-	if err != nil {
-		msg = fmt.Sprintf("米游社签到失败: %v", err)
-		slog.Error(msg)
-	} else {
-		msg = account.Phone + " " + job.FormatAwards(awards)
+		msg = account.Phone + " " + records.Success()
 		slog.Info(msg)
 	}
 	err = ntfy.Notify(context.Background(), msg)

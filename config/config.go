@@ -20,6 +20,13 @@ type Config struct {
 	RROCRKey string `json:"rrocr.key" yaml:"rrocr.key"`
 }
 
+func (c Config) FirstAccount() Account {
+	if len(c.Accounts) == 0 {
+		osutil.PanicErr(fmt.Errorf("no account found"))
+	}
+	return c.Accounts[0]
+}
+
 type Cron struct {
 	Spec    string `json:"spec"    yaml:"spec"`
 	Startup bool   `json:"startup" yaml:"startup"`

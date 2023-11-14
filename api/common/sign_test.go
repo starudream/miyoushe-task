@@ -1,31 +1,10 @@
-package miyoushe
+package common
 
 import (
 	"testing"
 
 	"github.com/starudream/go-lib/core/v2/utils/testutil"
-
-	"github.com/starudream/miyoushe-task/config"
 )
-
-func GetAccount(t *testing.T) config.Account {
-	accounts := config.C().Accounts
-	if len(accounts) == 0 {
-		t.SkipNow()
-	}
-	account := accounts[0]
-	testutil.Log(t, account)
-	return account
-}
-
-func SaveAccount(t *testing.T, account config.Account) {
-	config.UpdateAccount(account.Phone, func(config.Account) config.Account { return account })
-	testutil.Nil(t, config.Save())
-}
-
-func TestGameById(t *testing.T) {
-	testutil.Log(t, GameById)
-}
 
 func TestDS1(t *testing.T) {
 	c, s := ds1(1699372800, "123456")

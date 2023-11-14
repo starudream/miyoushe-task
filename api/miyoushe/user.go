@@ -1,36 +1,35 @@
 package miyoushe
 
 import (
+	"github.com/starudream/go-lib/core/v2/gh"
 	"github.com/starudream/go-lib/resty/v2"
 
+	"github.com/starudream/miyoushe-task/api/common"
 	"github.com/starudream/miyoushe-task/config"
 )
 
-type User struct {
+func Login(account config.Account) error {
+	req := common.R(account.Device).SetCookies(common.SToken(account)).SetBody(gh.M{"source_id": "", "source_key": "", "source_name": "", "source_type": 0})
+	_, err := common.Exec[any](req, "POST", AddrBBS+"/user/api/login")
+	return err
+}
+
+type GetUserData struct {
 	UserInfo *UserInfo `json:"user_info"`
 }
 
 type UserInfo struct {
-	Uid      string `json:"uid"`
-	Nickname string `json:"nickname"`
-
-	Aid           string `json:"aid"`
-	Mid           string `json:"mid"`
-	AccountName   string `json:"account_name"`
-	Email         string `json:"email"`
-	IsEmailVerify int    `json:"is_email_verify"`
-	AreaCode      string `json:"area_code"`
-	Mobile        string `json:"mobile"`
-	Realname      string `json:"realname"`
-	IdentityCode  string `json:"identity_code"`
+	Uid       string `json:"uid"`
+	Nickname  string `json:"nickname"`
+	Introduce string `json:"introduce"`
 }
 
-func GetUser(uid string, account ...config.Account) (*User, error) {
+func GetUser(uid string, account ...config.Account) (*GetUserData, error) {
 	var req *resty.Request
 	if len(account) == 0 {
-		req = R().SetQueryParam("uid", uid)
+		req = common.R().SetQueryParam("uid", uid)
 	} else {
-		req = R(account[0].Device).SetCookies(hcSToken(account[0]))
+		req = common.R(account[0].Device).SetCookies(common.SToken(account[0]))
 	}
-	return Exec[*User](req, "GET", AddrBBS+"/user/api/getUserFullInfo")
+	return common.Exec[*GetUserData](req, "GET", AddrBBS+"/user/api/getUserFullInfo")
 }
