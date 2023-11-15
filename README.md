@@ -113,7 +113,6 @@ services:
       app.log.file.enabled: "true"
       app.log.file.level: "debug"
       app.log.file.filename: "/miyoushe/app.log"
-      app.ntfy.weixin_work.key: "foo"
       app.cron.spec: "5 4 8 * * *"
       app.rrocr.key: "foo"
 ```
