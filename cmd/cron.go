@@ -17,15 +17,7 @@ var cronCmd = cobra.NewCommand(func(c *cobra.Command) {
 	c.Use = "cron"
 	c.Short = "Run as cron job"
 	c.RunE = func(cmd *cobra.Command, args []string) error {
-		if config.C().Cron.Startup {
-			cronRun()
-		}
-		err := cron.AddJob(config.C().Cron.Spec, "miyoushe-cron", cronRun)
-		if err != nil {
-			return fmt.Errorf("add cron job error: %w", err)
-		}
-		cron.Run()
-		return nil
+		return cronRun()
 	}
 })
 
@@ -33,7 +25,19 @@ func init() {
 	rootCmd.AddCommand(cronCmd)
 }
 
-func cronRun() {
+func cronRun() error {
+	if config.C().Cron.Startup {
+		cronJob()
+	}
+	err := cron.AddJob(config.C().Cron.Spec, "miyoushe-cron", cronJob)
+	if err != nil {
+		return fmt.Errorf("add cron job error: %w", err)
+	}
+	cron.Run()
+	return nil
+}
+
+func cronJob() {
 	for i := 0; i < len(config.C().Accounts); i++ {
 		cronForumAccount(config.C().Accounts[i])
 		cronGameAccount(config.C().Accounts[i])

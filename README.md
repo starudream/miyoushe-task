@@ -86,6 +86,15 @@ miyoushe-task sign game <account phone>
 miyoushe-task cron
 ```
 
+### Service
+
+```shell
+# register as system service
+miyoushe-task service --user --config miyoushe-task.yaml install
+miyoushe-task service start
+miyoushe-task service status
+```
+
 ## Docker
 
 ```shell
