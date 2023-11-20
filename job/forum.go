@@ -14,7 +14,7 @@ import (
 
 const (
 	PostView   = 3
-	PostUpvote = 5
+	PostUpvote = 10
 	PostShare  = 1
 	PostLoop   = 5
 )
