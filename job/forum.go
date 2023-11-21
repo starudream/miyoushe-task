@@ -13,10 +13,12 @@ import (
 )
 
 const (
+	VerifyRetry = 3
+
 	PostView   = 3
 	PostUpvote = 10
 	PostShare  = 1
-	PostLoop   = 5
+	PostLoop   = 10
 )
 
 type SignForumRecord struct {
@@ -24,6 +26,7 @@ type SignForumRecord struct {
 	GameName  string
 	HasSigned bool
 	IsRisky   bool
+	Verify    int
 	Points    int
 
 	PostView   int
@@ -73,7 +76,7 @@ func SignForum(account config.Account) (record SignForumRecord, err error) {
 	defer func() {
 		slog.Info("sign forum record: %+v", record)
 		if err != nil {
-			slog.Error("sign forum error: %w", err)
+			slog.Error("sign forum error: %v", err)
 		}
 	}()
 
@@ -107,9 +110,15 @@ sign:
 			record.HasSigned = true
 		} else if common.IsRetCode(err, common.RetCodeForumNeedVerification) {
 			record.IsRisky = true
+		verify:
+			record.Verify++
 			verification, err = Verify(account)
 			if err != nil {
-				return
+				slog.Error("verify error: %v", err)
+				if record.Verify < VerifyRetry {
+					slog.Info("retry verify, count: %d", record.Verify)
+					goto verify
+				}
 			}
 			goto sign
 		} else {
@@ -136,7 +145,7 @@ post:
 		if record.PostView < PostView {
 			_, e := miyoushe.GetPost(pid, account)
 			if e != nil {
-				slog.Error("get post error: %w", e)
+				slog.Error("get post error: %v", e)
 				continue
 			}
 			record.PostView++
@@ -144,7 +153,7 @@ post:
 		if record.PostUpvote < PostUpvote && !p.IsUpvote() {
 			e := miyoushe.UpvotePost(pid, false, account)
 			if e != nil {
-				slog.Error("upvote post error: %w", e)
+				slog.Error("upvote post error: %v", e)
 				continue
 			}
 			slog.Debug("upvote post: %s (%s) %s", p.Post.Subject, pid, p.User.Nickname)
@@ -153,13 +162,13 @@ post:
 		if record.PostShare < PostShare {
 			_, e := miyoushe.SharePost(pid, account)
 			if e != nil {
-				slog.Error("share post error: %w", e)
+				slog.Error("share post error: %v", e)
 				continue
 			}
 			record.PostShare++
 		}
 		// avoid too fast
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 	}
 
 	if record.LoopCount < PostLoop && (record.PostView < PostView || record.PostUpvote < PostUpvote || record.PostShare < PostShare) {
