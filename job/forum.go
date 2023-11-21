@@ -113,14 +113,15 @@ sign:
 		verify:
 			record.Verify++
 			verification, err = Verify(account)
-			if err != nil {
+			if err == nil {
+				goto sign
+			} else {
 				slog.Error("verify error: %v", err)
 				if record.Verify < VerifyRetry {
 					slog.Info("retry verify, count: %d", record.Verify)
 					goto verify
 				}
 			}
-			goto sign
 		} else {
 			err = fmt.Errorf("sign forum error: %w", err)
 			return
