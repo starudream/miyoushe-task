@@ -128,7 +128,9 @@ sign:
 		}
 	}
 
-	record.Points = signForumData.Points
+	if signForumData != nil {
+		record.Points = signForumData.Points
+	}
 
 post:
 
