@@ -24,6 +24,7 @@ type SignGameRecord struct {
 	RoleUid   string
 	HasSigned bool
 	IsRisky   bool
+	Verify    int
 	Award     string
 }
 
@@ -59,8 +60,7 @@ func SignGameRoles(roles []*miyoushe.GameRole, account config.Account) (SignGame
 		record, err := SignGameRole(role, account)
 		slog.Info("sign game record: %+v", record)
 		if err != nil {
-			slog.Error("sign game error: %v", err)
-			continue
+			return nil, err
 		}
 		records = append(records, record)
 	}
@@ -79,7 +79,7 @@ func SignGameRole(role *miyoushe.GameRole, account config.Account) (record SignG
 
 	gameId := SignGameIdByBiz[role.GameBiz]
 	if gameId == "" {
-		err = fmt.Errorf("game biz %s not supported", role.GameBiz)
+		slog.Warn("game biz %s not supported", role.GameBiz)
 		return
 	}
 
@@ -128,9 +128,14 @@ sign:
 		}
 	} else if signGameData.IsRisky() {
 		record.IsRisky = true
+		record.Verify++
 		verification, err = DM(signGameData.Gt, signGameData.Challenge)
 		if err != nil {
-			return
+			slog.Error("dm error: %v", err)
+			if record.Verify >= VerifyRetry {
+				return
+			}
+			slog.Info("retry sign, count: %d", record.Verify)
 		}
 		goto sign
 	}
