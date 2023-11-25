@@ -3,12 +3,12 @@ module github.com/starudream/miyoushe-task
 go 1.21
 
 require (
-	github.com/starudream/go-lib/cobra/v2 v2.0.2
-	github.com/starudream/go-lib/core/v2 v2.0.10
-	github.com/starudream/go-lib/cron/v2 v2.0.3
-	github.com/starudream/go-lib/ntfy/v2 v2.0.5
-	github.com/starudream/go-lib/resty/v2 v2.0.5
-	github.com/starudream/go-lib/service/v2 v2.0.0
+	github.com/starudream/go-lib/cobra/v2 v2.0.4
+	github.com/starudream/go-lib/core/v2 v2.0.12
+	github.com/starudream/go-lib/cron/v2 v2.0.5
+	github.com/starudream/go-lib/ntfy/v2 v2.0.6
+	github.com/starudream/go-lib/resty/v2 v2.0.6
+	github.com/starudream/go-lib/service/v2 v2.0.1
 	github.com/starudream/go-lib/tablew/v2 v2.0.3
 )
 

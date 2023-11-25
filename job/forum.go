@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	VerifyRetry = 3
+	VerifyRetry = 10
 
 	PostView   = 3
 	PostUpvote = 10
@@ -26,6 +26,7 @@ type SignForumRecord struct {
 	GameName  string
 	HasSigned bool
 	IsRisky   bool
+	IsSuccess bool
 	Verify    int
 	Points    int
 
@@ -41,12 +42,13 @@ func (r SignForumRecord) Name() string {
 
 func (r SignForumRecord) Success() string {
 	vs := []string{r.Name() + "完成"}
-	if r.IsRisky {
-		vs = append(vs, "使用打码平台验证")
-	}
 	vs = append(vs, fmt.Sprintf("在版区【%s】", r.GameName))
-	if r.Points > 0 {
-		vs = append(vs, fmt.Sprintf(" 打卡获得%d米游币", r.Points))
+	if r.HasSigned {
+		vs = append(vs, " 已打卡")
+	} else if r.Points > 0 {
+		vs = append(vs, fmt.Sprintf(" 打卡获得%d米游币（%d）", r.Points, r.Verify))
+	} else {
+		vs = append(vs, fmt.Sprintf(" 打卡失败（%d）", r.Verify))
 	}
 	vs = append(vs,
 		fmt.Sprintf(" 浏览%d/%d个帖子", r.PostView, PostView),
@@ -126,6 +128,8 @@ sign:
 			err = fmt.Errorf("sign forum error: %w", err)
 			return
 		}
+	} else {
+		record.IsSuccess = true
 	}
 
 	if signForumData != nil {

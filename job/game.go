@@ -24,6 +24,7 @@ type SignGameRecord struct {
 	RoleUid   string
 	HasSigned bool
 	IsRisky   bool
+	IsSuccess bool
 	Verify    int
 	Award     string
 }
@@ -37,7 +38,9 @@ func (rs SignGameRecords) Name() string {
 func (rs SignGameRecords) Success() string {
 	vs := []string{rs.Name() + "完成"}
 	for i := 0; i < len(rs); i++ {
-		vs = append(vs, fmt.Sprintf("在游戏【%s】角色【%s】获得 %s", rs[i].GameName, rs[i].RoleName, rs[i].Award))
+		if rs[i].HasSigned || rs[i].IsSuccess {
+			vs = append(vs, fmt.Sprintf("在游戏【%s】角色【%s】获得 %s（%d）", rs[i].GameName, rs[i].RoleName, rs[i].Award, rs[i].Verify))
+		}
 	}
 	return strings.Join(vs, "\n")
 }
@@ -138,6 +141,8 @@ sign:
 			slog.Info("retry sign, count: %d", record.Verify)
 		}
 		goto sign
+	} else {
+		record.IsSuccess = true
 	}
 
 award:
