@@ -7,7 +7,7 @@ import (
 )
 
 func UUID() string {
-	v, err := uuid.NewUUID()
+	v, err := uuid.NewRandom()
 	osutil.PanicErr(err)
 	return v.String()
 }
