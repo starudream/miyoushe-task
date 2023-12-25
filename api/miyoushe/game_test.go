@@ -27,3 +27,8 @@ func TestListGameRole(t *testing.T) {
 		testutil.LogNoErr(t, err, data)
 	})
 }
+
+func TestListGameCard(t *testing.T) {
+	data, err := ListGameCard(config.C().FirstAccount())
+	testutil.LogNoErr(t, err, data)
+}

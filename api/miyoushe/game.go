@@ -47,3 +47,30 @@ func ListGameRole(gameBiz string, account config.Account) (*ListGameRoleData, er
 	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParam("game_biz", gameBiz)
 	return common.Exec[*ListGameRoleData](req, "GET", AddrTakumi+"/binding/api/getUserGameRolesByStoken")
 }
+
+type ListGameCardData struct {
+	List []*GameCard `json:"list"`
+}
+
+type GameCard struct {
+	HasRole    bool            `json:"has_role"`
+	IsPublic   bool            `json:"is_public"`
+	GameId     int             `json:"game_id"`
+	GameRoleId string          `json:"game_role_id"`
+	Region     string          `json:"region"`
+	RegionName string          `json:"region_name"`
+	Level      int             `json:"level"`
+	Nickname   string          `json:"nickname"`
+	Data       []*GameCardItem `json:"data"`
+}
+
+type GameCardItem struct {
+	Type  int    `json:"type"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+func ListGameCard(account config.Account) (*ListGameCardData, error) {
+	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParam("uid", account.Uid)
+	return common.Exec[*ListGameCardData](req, "GET", AddrTakumiRecord+"/game_record/card/api/getGameRecordCard")
+}
