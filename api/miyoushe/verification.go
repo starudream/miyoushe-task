@@ -15,8 +15,8 @@ type CreateVerificationData struct {
 }
 
 func CreateVerification(account config.Account) (*CreateVerificationData, error) {
-	req := common.R(account.Device).SetCookies(common.SToken(account))
-	return common.Exec[*CreateVerificationData](req, "GET", AddrBBS+"/misc/api/createVerification?is_high=true")
+	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParam("is_high", "true")
+	return common.Exec[*CreateVerificationData](req, "GET", AddrBBS+"/misc/api/createVerification")
 }
 
 type VerifyVerificationData struct {
