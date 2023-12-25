@@ -34,4 +34,6 @@ const (
 	// https://github.com/UIGF-org/mihoyo-api-collect/blob/3a9116ea538941cfead749572df1f364cb9f9c8d/other/id.md#%E8%AE%BA%E5%9D%9Bid
 
 	ForumIdSR = "53"
+
+	XRpcSignGame = "x-rpc-signgame"
 )

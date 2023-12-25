@@ -15,6 +15,11 @@ func TestGetHome(t *testing.T) {
 		testutil.LogNoErr(t, err, data)
 	})
 
+	t.Run(common.GameIdYS, func(t *testing.T) {
+		data, err := GetHome(common.GameIdYS)
+		testutil.LogNoErr(t, err, data, data.GetSignActId())
+	})
+
 	t.Run(common.GameIdSR, func(t *testing.T) {
 		data, err := GetHome(common.GameIdSR)
 		testutil.LogNoErr(t, err, data, data.GetSignActId())

@@ -14,6 +14,7 @@ import (
 )
 
 var SignGameIdByBiz = map[string]string{
+	common.GameBizYSCN: common.GameIdYS,
 	common.GameBizSRCN: common.GameIdSR,
 }
 
@@ -91,6 +92,8 @@ func SignGameRole(role *miyoushe.GameRole, account config.Account) (record SignG
 	record.GameId = gameId
 	record.GameName = game.Name
 
+	gameName := strings.Split(role.GameBiz, "_")[0]
+
 	home, err := miyoushe.GetHome(gameId)
 	if err != nil {
 		err = fmt.Errorf("get home error: %w", err)
@@ -103,7 +106,7 @@ func SignGameRole(role *miyoushe.GameRole, account config.Account) (record SignG
 		return
 	}
 
-	today, err := miyoushe.GetSignGame(actId, role.Region, role.GameUid, account)
+	today, err := miyoushe.GetSignGame(gameName, actId, role.Region, role.GameUid, account)
 	if err != nil {
 		err = fmt.Errorf("get sign game error: %w", err)
 		return
@@ -121,7 +124,7 @@ func SignGameRole(role *miyoushe.GameRole, account config.Account) (record SignG
 
 sign:
 
-	signGameData, err = miyoushe.SignGame(actId, role.Region, role.GameUid, account, verification)
+	signGameData, err = miyoushe.SignGame(gameName, actId, role.Region, role.GameUid, account, verification)
 	if err != nil {
 		if common.IsRetCode(err, common.RetCodeGameHasSigned) {
 			record.HasSigned = true
@@ -147,7 +150,7 @@ sign:
 
 award:
 
-	award, err := miyoushe.ListSignGameAward(actId, role.Region, role.GameUid, account)
+	award, err := miyoushe.ListSignGameAward(gameName, actId, role.Region, role.GameUid, account)
 	if err != nil {
 		err = fmt.Errorf("list sign game award error: %w", err)
 		return

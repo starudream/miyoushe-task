@@ -9,23 +9,23 @@ import (
 	"github.com/starudream/miyoushe-task/config"
 )
 
-func GetSR(t *testing.T) (string, string, string) {
-	data1, err := GetHome(common.GameIdSR)
+func GetSR(t *testing.T) (string, string, string, string) {
+	data1, err := GetHome(common.GameIdYS)
 	testutil.LogNoErr(t, err, data1)
 	actId := data1.GetSignActId()
 	testutil.NotEqual(t, "", actId)
 
-	data2, err := ListGameRole(common.GameBizSRCN, config.C().FirstAccount())
+	data2, err := ListGameRole(common.GameBizYSCN, config.C().FirstAccount())
 	testutil.LogNoErr(t, err, data2)
 	testutil.NotEqual(t, 0, len(data2.List))
 	region, uid := data2.List[0].Region, data2.List[0].GameUid
 
-	return actId, region, uid
+	return common.GameNameYS, actId, region, uid
 }
 
 func TestSignGame(t *testing.T) {
-	actId, region, uid := GetSR(t)
-	data, err := SignGame(actId, region, uid, config.C().FirstAccount(), nil)
+	gameName, actId, region, uid := GetSR(t)
+	data, err := SignGame(gameName, actId, region, uid, config.C().FirstAccount(), nil)
 	if common.IsRetCode(err, common.RetCodeGameHasSigned) {
 		t.Skip("game has signed")
 	}
@@ -34,19 +34,19 @@ func TestSignGame(t *testing.T) {
 }
 
 func TestGetSignGame(t *testing.T) {
-	actId, region, uid := GetSR(t)
-	data, err := GetSignGame(actId, region, uid, config.C().FirstAccount())
+	gameName, actId, region, uid := GetSR(t)
+	data, err := GetSignGame(gameName, actId, region, uid, config.C().FirstAccount())
 	testutil.LogNoErr(t, err, data)
 }
 
 func TestListSignGame(t *testing.T) {
-	actId, _, _ := GetSR(t)
-	data, err := ListSignGame(actId, config.C().FirstAccount())
+	gameName, actId, _, _ := GetSR(t)
+	data, err := ListSignGame(gameName, actId, config.C().FirstAccount())
 	testutil.LogNoErr(t, err, data)
 }
 
 func TestListSignGameAward(t *testing.T) {
-	actId, region, uid := GetSR(t)
-	data, err := ListSignGameAward(actId, region, uid, config.C().FirstAccount())
+	gameName, actId, region, uid := GetSR(t)
+	data, err := ListSignGameAward(gameName, actId, region, uid, config.C().FirstAccount())
 	testutil.LogNoErr(t, err, data, len(data), data.Today(), data.Today().ShortString())
 }
