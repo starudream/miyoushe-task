@@ -134,6 +134,10 @@ sign:
 		}
 	} else if signGameData.IsRisky() {
 		record.IsRisky = true
+		if signGameData.Gt == "" || signGameData.Challenge == "" {
+			err = fmt.Errorf("sign game is risky, but gt or challenge is empty")
+			return
+		}
 		record.Verify++
 		verification, err = DM(signGameData.Gt, signGameData.Challenge)
 		if err != nil {

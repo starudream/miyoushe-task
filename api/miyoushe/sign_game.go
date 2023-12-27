@@ -21,7 +21,7 @@ type SignGameData struct {
 }
 
 func (t *SignGameData) IsRisky() bool {
-	return t.IsRisk && t.RiskCode == 5001
+	return t.IsRisk
 }
 
 func SignGame(gameName, actId, region, uid string, account config.Account, validate *common.Verification) (*SignGameData, error) {
