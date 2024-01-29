@@ -8,7 +8,7 @@ import (
 	"github.com/starudream/miyoushe-task/config"
 )
 
-func Refresh(account config.Account) (config.Account, error) {
+func RefreshSTokenAuto(account config.Account) (config.Account, error) {
 	_, err := miyoushe.GetUser("", account)
 	if err != nil {
 		return RefreshSToken(account)

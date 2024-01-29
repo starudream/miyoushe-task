@@ -59,7 +59,7 @@ func (r SignForumRecord) Success() string {
 }
 
 func SignForum(account config.Account) (record SignForumRecord, err error) {
-	account, err = Refresh(account)
+	account, err = RefreshSTokenAuto(account)
 	if err != nil {
 		return
 	}

@@ -46,8 +46,12 @@ func (rs SignGameRecords) Success() string {
 	return strings.Join(vs, "\n")
 }
 
-func SignGame(account config.Account) (SignGameRecords, error) {
-	account, err := Refresh(account)
+func SignGame(account config.Account) (_ SignGameRecords, err error) {
+	account, err = RefreshSTokenAuto(account)
+	if err != nil {
+		return nil, err
+	}
+	account, err = RefreshCToken(account)
 	if err != nil {
 		return nil, err
 	}
