@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/starudream/go-lib/cobra/v2 v2.0.7
-	github.com/starudream/go-lib/core/v2 v2.0.21
+	github.com/starudream/go-lib/core/v2 v2.0.22
 	github.com/starudream/go-lib/cron/v2 v2.0.7
 	github.com/starudream/go-lib/ntfy/v2 v2.0.10
 	github.com/starudream/go-lib/resty/v2 v2.0.10
@@ -42,7 +42,7 @@ require (
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/exp v0.0.0-20240318143956-a85f2c67cd81 // indirect
+	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
 	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
