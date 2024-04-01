@@ -9,6 +9,7 @@ import (
 	"github.com/starudream/go-lib/core/v2/slog"
 	"github.com/starudream/go-lib/cron/v2"
 	"github.com/starudream/go-lib/ntfy/v2"
+	"github.com/starudream/go-lib/service/v2"
 
 	"github.com/starudream/miyoushe-task/config"
 	"github.com/starudream/miyoushe-task/job"
@@ -18,7 +19,7 @@ var cronCmd = cobra.NewCommand(func(c *cobra.Command) {
 	c.Use = "cron"
 	c.Short = "Run as cron job"
 	c.RunE = func(cmd *cobra.Command, args []string) error {
-		return cronRun()
+		return service.New("miyoushe-task", nil).Run()
 	}
 })
 
