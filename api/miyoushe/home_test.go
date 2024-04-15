@@ -24,6 +24,11 @@ func TestGetHome(t *testing.T) {
 		data, err := GetHome(common.GameIdSR)
 		testutil.LogNoErr(t, err, data, data.GetSignActId())
 	})
+
+	t.Run(common.GameIdBH3, func(t *testing.T) {
+		data, err := GetHome(common.GameIdBH3)
+		testutil.LogNoErr(t, err, data, data.GetSignActId())
+	})
 }
 
 func TestGetBusinesses(t *testing.T) {

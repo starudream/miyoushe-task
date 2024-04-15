@@ -14,8 +14,9 @@ import (
 )
 
 var SignGameIdByBiz = map[string]string{
-	common.GameBizYSCN: common.GameIdYS,
-	common.GameBizSRCN: common.GameIdSR,
+	common.GameBizBH3CN: common.GameIdBH3,
+	common.GameBizYSCN:  common.GameIdYS,
+	common.GameBizSRCN:  common.GameIdSR,
 }
 
 type SignGameRecord struct {
