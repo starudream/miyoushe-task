@@ -43,6 +43,10 @@ func DM(gt, challenge string) (*common.Verification, error) {
 }
 
 func dm(gt, challenge string) (*common.Verification, error) {
+	if key := config.TT().Key; key != "" {
+		slog.Info("attempt to dm using ttocr, please wait a moment")
+		return ocr.TT(key, gt, challenge, common.RefererAct)
+	}
 	if key := config.C().RROCRKey; key != "" {
 		slog.Info("attempt to dm using rrocr, please wait a moment")
 		return ocr.RR(key, gt, challenge, common.RefererAct)
