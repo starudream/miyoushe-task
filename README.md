@@ -32,7 +32,12 @@ cron:
 
 # 打码平台配置
 rrocr:
-    key: ""
+    key: "from rrocr.com"
+ttocr:
+    key: "from ttocr.com"
+    interval: 3s
+    timeout: 90s
+    item_id: 388
 ```
 
 ## Usage
