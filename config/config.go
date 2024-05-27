@@ -18,6 +18,7 @@ type Config struct {
 
 	// 打码接口
 	RROCRKey string `json:"rrocr.key" yaml:"rrocr.key"`
+	TTOCR    TTOCR  `json:"ttocr"     yaml:"ttocr"`
 }
 
 func (c Config) FirstAccount() Account {
@@ -45,6 +46,7 @@ var (
 func init() {
 	_ = config.Unmarshal("", &_c)
 	_ = config.Unmarshal("cron", &_c.Cron)
+	_ = config.Unmarshal("ttocr", &_c.TTOCR)
 	config.LoadStruct(_c)
 }
 
