@@ -18,6 +18,8 @@ type Account struct {
 
 	Mid    string `json:"mid"    yaml:"mid"`
 	SToken string `json:"stoken" yaml:"stoken" table:",ignore"`
+
+	SignGameIds []string `json:"sign_game_ids" yaml:"sign_game_ids" table:",ignore"`
 }
 
 func AddAccount(account Account) {

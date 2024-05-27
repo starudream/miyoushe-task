@@ -92,6 +92,11 @@ func SignGameRole(role *miyoushe.GameRole, account config.Account) (record SignG
 		return
 	}
 
+	if len(account.SignGameIds) > 0 && !slices.Contains(account.SignGameIds, gameId) {
+		slog.Warn("game id %s not in sign game ids", gameId)
+		return
+	}
+
 	game := miyoushe.AllGamesById[gameId]
 
 	record.GameId = gameId
