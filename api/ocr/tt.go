@@ -24,17 +24,13 @@ func TT(key, gt, challenge, refer string) (*common.Verification, error) {
 		for {
 			time.Sleep(config.TT().Interval)
 			data, err = ttResult(key, resultId)
-			e, ok1 := resty.AsRespErr(err)
-			if ok1 {
-				v, ok2 := e.Response.Result().(interface{ GetStatus() int })
-				if ok2 && v.GetStatus() == 2 {
+			if e, ok1 := resty.AsRespErr(err); ok1 {
+				if v, ok2 := e.Response.Result().(interface{ GetStatus() int }); ok2 && v.GetStatus() == 2 {
 					continue
 				}
 			}
 			vch <- data
-			if err != nil {
-				return
-			}
+			return
 		}
 	}()
 
