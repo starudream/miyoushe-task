@@ -59,7 +59,7 @@ func (t *ttRecognizeResp) String() string {
 func ttRecognize(key, gt, challenge, refer string) (string, error) {
 	form := gh.MS{"appkey": key, "gt": gt, "challenge": challenge, "itemid": config.TT().ItemId, "referer": refer}
 	res, err := resty.ParseResp[*ttRecognizeResp, *ttRecognizeResp](
-		resty.R().SetError(&ttRecognizeResp{}).SetResult(&ttRecognizeResp{}).SetFormData(form).Post("https://api.ttocr.com/api/recognize"),
+		resty.R().SetError(&ttRecognizeResp{}).SetResult(&ttRecognizeResp{}).SetFormData(form).Post("http://api.ttocr.com/api/recognize"),
 	)
 	if err != nil {
 		return "", fmt.Errorf("[ttocr] %w", err)
@@ -92,7 +92,7 @@ func (t *ttResultResp) String() string {
 func ttResult(key, resultId string) (*common.Verification, error) {
 	form := gh.MS{"appkey": key, "resultid": resultId}
 	res, err := resty.ParseResp[*ttResultResp, *ttResultResp](
-		resty.R().SetError(&ttResultResp{}).SetResult(&ttResultResp{}).SetFormData(form).Post("https://api.ttocr.com/api/results"),
+		resty.R().SetError(&ttResultResp{}).SetResult(&ttResultResp{}).SetFormData(form).Post("http://api.ttocr.com/api/results"),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("[ttocr] %w", err)
