@@ -14,7 +14,7 @@ const (
 	RefererApp = "https://app.mihoyo.com"
 	RefererAct = "https://act.mihoyo.com"
 
-	AppVersion    = "2.66.1"
+	AppVersion    = "2.73.1"
 	AppIdMiyoushe = "bll8iq97cem8" // 米游社
 )
 
