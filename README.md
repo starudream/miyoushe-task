@@ -25,6 +25,7 @@ accounts:
     ctoken: "cookie token"
     mid: "米哈游 uid"
     stoken: "stoken v2"
+    sign_game_ids: [ "游戏签到的游戏 id 列表，为空时签到所有游戏角色" ]
 
 cron:
   spec: "签到奖励执行时间，默认 5 4 8 * * * 即每天 08:04:05"
