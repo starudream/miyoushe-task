@@ -27,6 +27,8 @@ const (
 	GameBizYSGL  = GameNameYS + "_" + global
 	GameBizSRCN  = GameNameSR + "_" + cn
 	GameBizSRGL  = GameNameSR + "_" + global
+	GameBizZZZCN = GameNameZZZ + "_" + cn
+	GameBizZZZGL = GameNameZZZ + "_" + global
 
 	cn     = "cn"
 	global = "global"

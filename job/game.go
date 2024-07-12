@@ -17,6 +17,7 @@ var SignGameIdByBiz = map[string]string{
 	common.GameBizBH3CN: common.GameIdBH3,
 	common.GameBizYSCN:  common.GameIdYS,
 	common.GameBizSRCN:  common.GameIdSR,
+	common.GameBizZZZCN: common.GameIdZZZ,
 }
 
 type SignGameRecord struct {
