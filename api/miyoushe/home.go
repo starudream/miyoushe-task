@@ -35,8 +35,8 @@ func (h *Home) GetSignActId() string {
 	return ""
 }
 
-func GetHome(gameId string) (*Home, error) {
-	req := common.R().SetQueryParam("gids", gameId)
+func GetHome(gameId string, account config.Account) (*Home, error) {
+	req := common.R(account.Device).SetQueryParam("gids", gameId)
 	return common.Exec[*Home](req, "GET", AddrBBS+"/apihub/api/home/new")
 }
 

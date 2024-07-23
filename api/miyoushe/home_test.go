@@ -11,22 +11,22 @@ import (
 
 func TestGetHome(t *testing.T) {
 	t.Run(common.GameIdDBY, func(t *testing.T) {
-		data, err := GetHome(common.GameIdDBY)
+		data, err := GetHome(common.GameIdDBY, config.C().FirstAccount())
 		testutil.LogNoErr(t, err, data)
 	})
 
 	t.Run(common.GameIdYS, func(t *testing.T) {
-		data, err := GetHome(common.GameIdYS)
+		data, err := GetHome(common.GameIdYS, config.C().FirstAccount())
 		testutil.LogNoErr(t, err, data, data.GetSignActId())
 	})
 
 	t.Run(common.GameIdSR, func(t *testing.T) {
-		data, err := GetHome(common.GameIdSR)
+		data, err := GetHome(common.GameIdSR, config.C().FirstAccount())
 		testutil.LogNoErr(t, err, data, data.GetSignActId())
 	})
 
 	t.Run(common.GameIdBH3, func(t *testing.T) {
-		data, err := GetHome(common.GameIdBH3)
+		data, err := GetHome(common.GameIdBH3, config.C().FirstAccount())
 		testutil.LogNoErr(t, err, data, data.GetSignActId())
 	})
 }

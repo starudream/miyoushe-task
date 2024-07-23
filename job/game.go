@@ -105,7 +105,7 @@ func SignGameRole(role *miyoushe.GameRole, account config.Account) (record SignG
 
 	gameName := strings.Split(role.GameBiz, "_")[0]
 
-	home, err := miyoushe.GetHome(gameId)
+	home, err := miyoushe.GetHome(gameId, account)
 	if err != nil {
 		err = fmt.Errorf("get home error: %w", err)
 		return

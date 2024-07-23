@@ -21,7 +21,7 @@ func GetRole(t *testing.T, gameBiz string) (string, string, string, string) {
 	gameName := strings.Split(gameBiz, "_")[0]
 	gameId := gameIdByName[gameName]
 
-	data1, err := GetHome(gameId)
+	data1, err := GetHome(gameId, config.C().FirstAccount())
 	testutil.LogNoErr(t, err, data1)
 	actId := data1.GetSignActId()
 	testutil.MustNotEqual(t, "", actId)
