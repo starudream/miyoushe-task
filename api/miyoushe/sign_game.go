@@ -23,6 +23,18 @@ func signGameAddr(gameName string) string {
 	return AddrTakumi
 }
 
+var signGameHeaderByName = map[string]string{
+	common.GameNameZZZ: "zzz",
+}
+
+func signGameHeader(gameName string) string {
+	header, ok := signGameHeaderByName[gameName]
+	if ok {
+		return header
+	}
+	return gameName
+}
+
 type SignGameData struct {
 	Code      string `json:"code"`
 	Success   int    `json:"success"`
@@ -38,7 +50,7 @@ func (t *SignGameData) IsRisky() bool {
 
 func SignGame(gameName, actId, region, uid string, account config.Account, validate *common.Verification) (*SignGameData, error) {
 	body := gh.MS{"lang": "zh-cn", "act_id": actId, "region": region, "uid": uid}
-	req := common.R(account.Device, validate).SetHeader(common.XRpcSignGame, gameName).SetCookies(common.SToken(account)).SetCookies(common.CToken(account)).SetBody(body)
+	req := common.R(account.Device, validate).SetHeader(common.XRpcSignGame, signGameHeader(gameName)).SetCookies(common.SToken(account)).SetCookies(common.CToken(account)).SetBody(body)
 	return common.Exec[*SignGameData](req, "POST", signGameAddr(gameName)+"/event/luna/sign")
 }
 
@@ -54,7 +66,7 @@ type GetSignGameData struct {
 
 func GetSignGame(gameName, actId, region, uid string, account config.Account) (*GetSignGameData, error) {
 	query := gh.MS{"lang": "zh-cn", "act_id": actId, "region": region, "uid": uid}
-	req := common.R(account.Device).SetHeader(common.XRpcSignGame, gameName).SetCookies(common.SToken(account)).SetCookies(common.CToken(account)).SetQueryParams(query)
+	req := common.R(account.Device).SetHeader(common.XRpcSignGame, signGameHeader(gameName)).SetCookies(common.SToken(account)).SetCookies(common.CToken(account)).SetQueryParams(query)
 	return common.Exec[*GetSignGameData](req, "GET", signGameAddr(gameName)+"/event/luna/info")
 }
 
@@ -83,7 +95,7 @@ type SignGameExtraAward struct {
 
 func ListSignGame(gameName, actId string, account config.Account) (*ListSignGameData, error) {
 	query := gh.MS{"lang": "zh-cn", "act_id": actId}
-	req := common.R(account.Device).SetHeader(common.XRpcSignGame, gameName).SetCookies(common.SToken(account)).SetQueryParams(query)
+	req := common.R(account.Device).SetHeader(common.XRpcSignGame, signGameHeader(gameName)).SetCookies(common.SToken(account)).SetQueryParams(query)
 	return common.Exec[*ListSignGameData](req, "GET", signGameAddr(gameName)+"/event/luna/home")
 }
 
@@ -115,7 +127,7 @@ func (v1 SignGameAwards) ShortString() string {
 func ListSignGameAward(gameName, actId, region, uid string, account config.Account) (list SignGameAwards, _ error) {
 	for page, total := 1, -1; ; page++ {
 		query := gh.MS{"lang": "zh-cn", "act_id": actId, "region": region, "uid": uid, "current_page": strconv.Itoa(page), "page_size": "10"}
-		req := common.R(account.Device).SetHeader(common.XRpcSignGame, gameName).SetCookies(common.SToken(account)).SetCookies(common.CToken(account)).SetQueryParams(query)
+		req := common.R(account.Device).SetHeader(common.XRpcSignGame, signGameHeader(gameName)).SetCookies(common.SToken(account)).SetCookies(common.CToken(account)).SetQueryParams(query)
 		data, err := common.Exec[*ListSignGameAwardData](req, "GET", signGameAddr(gameName)+"/event/luna/award", 2)
 		if err != nil {
 			return nil, err
