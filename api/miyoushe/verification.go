@@ -7,16 +7,9 @@ import (
 	"github.com/starudream/miyoushe-task/config"
 )
 
-type CreateVerificationData struct {
-	Challenge  string `json:"challenge"`
-	Gt         string `json:"gt"`
-	NewCaptcha int    `json:"new_captcha"`
-	Success    int    `json:"success"`
-}
-
-func CreateVerification(account config.Account) (*CreateVerificationData, error) {
+func CreateVerification(account config.Account) (*common.AigisData, error) {
 	req := common.R(account.Device).SetCookies(common.SToken(account)).SetQueryParam("is_high", "true")
-	return common.Exec[*CreateVerificationData](req, "GET", AddrBBS+"/misc/api/createVerification")
+	return common.Exec[*common.AigisData](req, "GET", AddrBBS+"/misc/api/createVerification")
 }
 
 type VerifyVerificationData struct {

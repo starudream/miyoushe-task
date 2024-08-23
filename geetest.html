@@ -1,0 +1,82 @@
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>GeeTest</title>
+    <style>
+        .box {
+            height: 500px;
+            width: 500px;
+            margin: 100px auto 0;
+            text-align: center;
+        }
+
+        #generate {
+            margin-bottom: 10px;
+        }
+
+        #captcha {
+            display: inline-block;
+            height: 60px;
+            width: 500px;
+        }
+
+        #result {
+            width: 100%;
+            height: 400px;
+            padding: 5px 5px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            resize: none;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <label for="gt">gt: </label><input type="text" id="gt">
+    <label for="challenge">challenge: </label><input type="text" id="challenge">
+    <button id="generate">generate</button>
+    <hr>
+    <div id="captcha"></div>
+    <label for="result"></label><textarea id="result"></textarea>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://static.geetest.com/static/js/gt.0.4.9.js"></script>
+<script type="application/javascript">
+    $(function () {
+        $("#generate").click(function () {
+            const gt = $("#gt").val().trim()
+            const challenge = $("#challenge").val().trim()
+            if (gt && challenge) {
+                initGeetest({
+                    gt: gt,
+                    challenge: challenge,
+                    new_captcha: true,
+                    product: "popup",
+                    https: true,
+                    nativeButton: {
+                        height: "100%",
+                        width: "100%",
+                    },
+                }, function (captcha) {
+                    captcha.appendTo("#captcha")
+                    captcha
+                        .onReady(function () {
+                        })
+                        .onSuccess(function () {
+                            $("#result").text(JSON.stringify(captcha.getValidate()))
+                        })
+                        .onError(function () {
+                        })
+                })
+            } else {
+                alert("gt or challenge is empty")
+            }
+        })
+    })
+</script>
+</body>
+</html>

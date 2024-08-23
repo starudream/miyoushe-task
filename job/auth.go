@@ -11,6 +11,9 @@ import (
 func RefreshSTokenAuto(account config.Account) (config.Account, error) {
 	_, err := miyoushe.GetUser("", account)
 	if err != nil {
+		if account.GToken == "" {
+			return account, fmt.Errorf("get user error: %w", err)
+		}
 		return RefreshSToken(account)
 	}
 	return account, nil

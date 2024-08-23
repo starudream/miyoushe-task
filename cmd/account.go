@@ -1,17 +1,19 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/starudream/go-lib/cobra/v2"
 	"github.com/starudream/go-lib/core/v2/slog"
+	"github.com/starudream/go-lib/core/v2/utils/fmtutil"
 	"github.com/starudream/go-lib/core/v2/utils/sliceutil"
 	"github.com/starudream/go-lib/tablew/v2"
 
+	"github.com/starudream/miyoushe-task/api/common"
 	"github.com/starudream/miyoushe-task/api/mihoyo"
 	"github.com/starudream/miyoushe-task/config"
 	"github.com/starudream/miyoushe-task/job"
-	"github.com/starudream/miyoushe-task/util"
 )
 
 var (
@@ -47,28 +49,44 @@ var (
 		c.RunE = func(cmd *cobra.Command, args []string) error {
 			account := xGetAccount(args)
 
-			res, err := mihoyo.GenQRCode(account)
+			_, err := mihoyo.SendPhoneCode("", account)
 			if err != nil {
-				return fmt.Errorf("generate qrcode error: %w", err)
-			}
-			slog.Info("qrcode content: %s", res.Url)
-			fmt.Printf("\n\n%s\n\n", util.QRCode(res.Url))
+				if !common.IsRetCode(err, common.RetCodeSendPhoneCodeFrequently) {
+					return fmt.Errorf("send phone code error: %w", err)
+				}
 
-			account, err = job.WaitQRCodeConfirmed(res.Ticket, account)
-			if err != nil {
-				return err
+				aigis, aigisData := common.GetAigisData(err)
+				if aigis == nil || aigisData == nil {
+					return fmt.Errorf("get aigis data empty")
+				}
+
+				slog.Info("aigis gt: %s, challenge: %s", aigisData.Gt, aigisData.Challenge)
+
+				geetest := base64.StdEncoding.EncodeToString([]byte(fmtutil.Scan("please enter GeeTest json string: ")))
+
+				_, err = mihoyo.SendPhoneCode(fmt.Sprintf("%s;%s", aigis.SessionId, geetest), account)
+				if err != nil {
+					return fmt.Errorf("send phone code error: %w", err)
+				}
 			}
-			if account.SToken == "" {
+
+			code := fmtutil.Scan("please enter the verification code you received (use ctrl+c to exit): ")
+			if code == "" {
 				return nil
 			}
 
-			account, err = job.RefreshCToken(account)
+			res, err := mihoyo.LoginByPhoneCode(code, account)
 			if err != nil {
-				return err
+				return fmt.Errorf("login by phone code error: %w", err)
 			}
-			account, err = job.RefreshSToken(account)
+
+			account.Uid = res.UserInfo.Aid
+			account.Mid = res.UserInfo.Mid
+			account.SToken = res.Token.Token
+
+			_, err = job.RefreshCToken(account)
 			if err != nil {
-				return err
+				return fmt.Errorf("refresh token error: %w", err)
 			}
 
 			slog.Info("login success")

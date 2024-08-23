@@ -2,7 +2,9 @@ package common
 
 import (
 	"fmt"
+	"net/http"
 
+	"github.com/starudream/go-lib/core/v2/codec/json"
 	"github.com/starudream/go-lib/resty/v2"
 
 	"github.com/starudream/miyoushe-task/config"
@@ -54,4 +56,41 @@ func Exec[T any](r *resty.Request, method, url string, ds ...int) (t T, _ error)
 		return t, fmt.Errorf("[miyoushe] %w", err)
 	}
 	return res.Data, nil
+}
+
+func GetHeaders(err error) http.Header {
+	if err != nil {
+		e, ok := resty.AsRespErr(err)
+		if ok {
+			return e.Response.Header()
+		}
+	}
+	return http.Header{}
+}
+
+type Aigis struct {
+	SessionId string `json:"session_id"`
+	MmtType   int    `json:"mmt_type"`
+	Data      string `json:"data"`
+}
+
+type AigisData struct {
+	Challenge  string `json:"challenge"`
+	Gt         string `json:"gt"`
+	NewCaptcha int    `json:"new_captcha"`
+	Success    int    `json:"success"`
+}
+
+func GetAigisData(err error) (*Aigis, *AigisData) {
+	s := GetHeaders(err).Get("x-rpc-aigis")
+	if s != "" {
+		a, e1 := json.UnmarshalTo[*Aigis](s)
+		if e1 == nil {
+			b, e2 := json.UnmarshalTo[*AigisData](a.Data)
+			if e2 == nil {
+				return a, b
+			}
+		}
+	}
+	return nil, nil
 }

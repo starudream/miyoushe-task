@@ -78,3 +78,40 @@ func QueryQRCode(ticket string, account config.Account) (*QueryQRCodeData, error
 	data.Payload.Token = payload.Token // game token
 	return data, nil
 }
+
+const phoneAreaCodeCN = "+86"
+
+type SendPhoneCodeData struct {
+	SentNew    bool   `json:"sent_new"`
+	Countdown  int    `json:"countdown"`
+	ActionType string `json:"action_type"`
+}
+
+func SendPhoneCode(aigis string, account config.Account) (*SendPhoneCodeData, error) {
+	req := common.R(account.Device).SetBody(gh.M{
+		"area_code": common.RSAEncrypt(phoneAreaCodeCN),
+		"mobile":    common.RSAEncrypt(account.Phone),
+	})
+	if aigis != "" {
+		req.SetHeader("x-rpc-aigis", aigis)
+	}
+	return common.Exec[*SendPhoneCodeData](req, "POST", AddrPassport+"/account/ma-cn-verifier/verifier/createLoginCaptcha")
+}
+
+type LoginByPhoneCodeData struct {
+	Token       *TokenInfo `json:"token"`
+	UserInfo    *UserInfo  `json:"user_info"`
+	LoginTicket string     `json:"login_ticket"`
+}
+
+const actionTypeLoginByMobileCaptcha = "login_by_mobile_captcha"
+
+func LoginByPhoneCode(code string, account config.Account) (*LoginByPhoneCodeData, error) {
+	req := common.R(account.Device).SetBody(gh.M{
+		"area_code":   common.RSAEncrypt(phoneAreaCodeCN),
+		"mobile":      common.RSAEncrypt(account.Phone),
+		"action_type": actionTypeLoginByMobileCaptcha,
+		"captcha":     code,
+	})
+	return common.Exec[*LoginByPhoneCodeData](req, "POST", AddrPassport+"/account/ma-cn-passport/app/loginByMobileCaptcha")
+}

@@ -18,3 +18,15 @@ func TestQueryQRCode(t *testing.T) {
 	data, err := QueryQRCode("654b81644b7cf30567d6d20c", config.C().FirstAccount())
 	testutil.LogNoErr(t, err, data)
 }
+
+func TestSendPhoneCode(t *testing.T) {
+	account := config.C().FirstAccount()
+	data, err := SendPhoneCode("", account)
+	testutil.LogNoErr(t, err, data)
+}
+
+func TestLoginByPhoneCode(t *testing.T) {
+	account := config.C().FirstAccount()
+	data, err := LoginByPhoneCode("123456", account)
+	testutil.LogNoErr(t, err, data)
+}
