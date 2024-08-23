@@ -21,7 +21,7 @@ accounts:
       version: "手机安卓版本，默认 13"
       channel: "渠道，默认 miyousheluodi"
     uid: "米游社 uid"
-    gtoken: "game token"
+    gtoken: "game token，废弃"
     ctoken: "cookie token"
     mid: "米哈游 uid"
     stoken: "stoken v2"
@@ -70,9 +70,18 @@ Use "miyoushe-task [command] --help" for more information about a command.
 miyoushe-task account list
 # init account device information
 miyoushe-task account init <account phone>
-# login account by scan qrcode to get game token
+# login account by send phone code to get token
 miyoushe-task account login <account phone>
 ```
+
+如果登录时出现验证码， 下载项目中 [geetest.html](./geetest.html) 文件，本地打开文件后输入 `gt` 和 `challenge`，复制极验结果。
+
+```text
+aigis gt: abc, challenge: xyz
+please enter GeeTest json string: {"geetest_challenge":"123","geetest_validate":"456","geetest_seccode":"789|jordan"}
+```
+
+![geetest](./docs/geetest1.png)
 
 ### SignForum `米游社每日任务`
 
