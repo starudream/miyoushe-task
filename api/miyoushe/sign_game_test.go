@@ -13,6 +13,8 @@ import (
 var gameIdByName = map[string]string{
 	common.GameNameBH3: common.GameIdBH3,
 	common.GameNameYS:  common.GameIdYS,
+	common.GameNameBH2: common.GameIdBH2,
+	common.GameNameWD:  common.GameIdWD,
 	common.GameNameSR:  common.GameIdSR,
 	common.GameNameZZZ: common.GameIdZZZ,
 }

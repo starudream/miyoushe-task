@@ -16,6 +16,8 @@ import (
 var SignGameIdByBiz = map[string]string{
 	common.GameBizBH3CN: common.GameIdBH3,
 	common.GameBizYSCN:  common.GameIdYS,
+	common.GameBizBH2CN: common.GameIdBH2,
+	common.GameBizWDCN:  common.GameIdWD,
 	common.GameBizSRCN:  common.GameIdSR,
 	common.GameBizZZZCN: common.GameIdZZZ,
 }

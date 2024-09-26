@@ -22,16 +22,13 @@ const (
 	// https://github.com/UIGF-org/mihoyo-api-collect/blob/3a9116ea538941cfead749572df1f364cb9f9c8d/other/id.md#%E6%B8%B8%E6%88%8F%E6%A0%87%E8%AF%86%E7%AC%A6
 
 	GameBizBH3CN = GameNameBH3 + "_" + cn
-	GameBizBH3GL = GameNameBH3 + "_" + global
 	GameBizYSCN  = GameNameYS + "_" + cn
-	GameBizYSGL  = GameNameYS + "_" + global
+	GameBizBH2CN = GameNameBH2 + "_" + cn
+	GameBizWDCN  = GameNameWD + "_" + cn
 	GameBizSRCN  = GameNameSR + "_" + cn
-	GameBizSRGL  = GameNameSR + "_" + global
 	GameBizZZZCN = GameNameZZZ + "_" + cn
-	GameBizZZZGL = GameNameZZZ + "_" + global
 
-	cn     = "cn"
-	global = "global"
+	cn = "cn"
 
 	// https://github.com/UIGF-org/mihoyo-api-collect/blob/3a9116ea538941cfead749572df1f364cb9f9c8d/other/id.md#%E8%AE%BA%E5%9D%9Bid
 
