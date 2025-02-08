@@ -23,11 +23,13 @@ builds:
       - -X "github.com/starudream/go-lib/core/v2/config/version.gitVersion=v{{ .Version }}"
 
 archives:
-  - format: tar.gz
+  - formats:
+      - tar.gz
     name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
 
 dockers:
   - goos: linux
