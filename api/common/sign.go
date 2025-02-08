@@ -13,7 +13,7 @@ import (
 
 const (
 	// AppSaltK2 https://blog.starudream.cn/2023/11/09/miyoushe-salt-2.62.2/
-	AppSaltK2 = "WGtruoQrwczmsjLOPXzJLnaAYycsLavx" // 2.73.1
+	AppSaltK2 = "QVu5OdwEWxkq9ygpYBgDprR5tI471HWQ" // 2.81.1
 	// AppSalt6X https://github.com/UIGF-org/mihoyo-api-collect/issues/1
 	AppSalt6X = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
 )

@@ -8,8 +8,8 @@ import (
 
 func TestDS1(t *testing.T) {
 	c, s := ds1(1699372800, "123456")
-	testutil.Equal(t, "salt=pIlzNr5SAZhdnFW8ZxauW8UlxRdZc45r&t=1699372800&r=123456", c)
-	testutil.Equal(t, "1699372800,123456,1338659bf2f390470717646a658d15e1", s)
+	testutil.Equal(t, "salt=QVu5OdwEWxkq9ygpYBgDprR5tI471HWQ&t=1699372800&r=123456", c)
+	testutil.Equal(t, "1699372800,123456,6e98ea06bfae57644337e04d818301db", s)
 }
 
 func TestDS2(t *testing.T) {
