@@ -1,4 +1,4 @@
-# Miyoushe-Task
+# Miyoushe-Task (_No longer maintained_)
 
 ![golang](https://img.shields.io/github/actions/workflow/status/starudream/miyoushe-task/golang.yml?style=for-the-badge&logo=github&label=golang)
 ![release](https://img.shields.io/github/v/release/starudream/miyoushe-task?style=for-the-badge)
